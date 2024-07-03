@@ -1,0 +1,44 @@
+library(readxl)
+library(ggrepel)
+library(dplyr)
+
+# Each home run is in a sheet separated by month, so compile them all here
+March = read_excel("Downloads/Homerun Tracker.xlsx",  
+                             sheet = "March") 
+April = read_excel("Downloads/Homerun Tracker.xlsx",  
+                             sheet = "April") 
+May = read_excel("Downloads/Homerun Tracker.xlsx",  
+                             sheet = "May")
+June = read_excel("Downloads/Homerun Tracker.xlsx",  
+                 sheet = "June")
+July = read_excel("Downloads/Homerun Tracker.xlsx",  
+                 sheet = "July")
+Homerun_Tracker = rbind(March, April, May, June, July)
+Homerun_Tracker = data.frame(Homerun_Tracker)
+
+# For ANOVA, we are trying to avoid neautral sight games as they disrupt the flow of our data. Remove all neautral sight games.
+Homerun_Tracker = Homerun_Tracker[-c(1, 2, 805, 808, 809, 819, 851, 857, 862), ]
+
+# ANOVA for distance compared to the stadium
+anova_ds <- aov(Distance ~ Stadium, data = Homerun_Tracker)
+summary(anova_ds)
+
+# ANOVA for distance compared to the team
+anova_dt <- aov(Distance ~ Team, data = Homerun_Tracker)
+summary(anova_dt)
+
+# ANOVA for exit velocity compared to the stadium
+anova_es <- aov(Exit.Velocity ~ Stadium, data = Homerun_Tracker)
+summary(anova_es)
+
+# ANOVA for exit velocity compared to the team
+anova_et <- aov(Exit.Velocity ~ Team, data = Homerun_Tracker)
+summary(anova_et)
+
+# ANOVA for launch angle compared to the stadium
+anova_ls <- aov(Launch.Angle ~ Stadium, data = Homerun_Tracker)
+summary(anova_ls)
+
+# ANOVA for launch anlge compared to the team
+anova_lt <- aov(Launch.Angle ~ Team, data = Homerun_Tracker)
+summary(anova_lt)
